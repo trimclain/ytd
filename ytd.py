@@ -6,13 +6,17 @@ import subprocess
 from pytube import YouTube
 
 def ytdownload_direct():
-    """ytdownload as a script from user input"""
+    """ ytdownload as a script from user input """
+
     # Get the video from the Link
     if len(sys.argv) == 1:
         link = input("Enter the Link: ")
     else:
         link = sys.argv[1]
+
+    print('Downloading...')
     ytdownload(link)
+    print('Done')
 
 
 def ytdownload(link, oupath='out'):
@@ -53,6 +57,4 @@ def ytdownload(link, oupath='out'):
 
 
 if __name__ == '__main__':
-    print('Downloading...')
     ytdownload_direct()
-    print('Done')
