@@ -5,8 +5,9 @@ import os
 import subprocess
 from pytube import YouTube
 
+
 def ytdownload_direct():
-    """ ytdownload as a script from user input """
+    """ytdownload as a script from user input"""
 
     # Get the video from the Link
     if len(sys.argv) == 1:
@@ -46,12 +47,18 @@ def ytdownload(link, oupath='out'):
     default_filename = ys.default_filename
     title = yt.title
     new_filename = title + '.mp3'
-    subprocess.run([
-        'ffmpeg',
-        '-y',
-        '-i', os.path.join(oupath, default_filename),
-        os.path.join(oupath, new_filename)
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT) # Get no output
+    subprocess.run(
+        [
+            'ffmpeg',
+            '-y',
+            '-i',
+            os.path.join(oupath, default_filename),
+            os.path.join(oupath, new_filename),
+        ],
+        # Get no output
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )
     # Delete mp4
     subprocess.run(['rm', os.path.join(oupath, default_filename)])
 
