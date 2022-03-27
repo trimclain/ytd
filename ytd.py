@@ -20,7 +20,7 @@ def ytdownload_direct():
     print('Done')
 
 
-def ytdownload(link, oupath='out'):
+def ytdownload(link, outpath='out'):
     """
     Download a video from YouTube as mp3
 
@@ -41,7 +41,7 @@ def ytdownload(link, oupath='out'):
     ys = yt.streams.filter(only_audio=True)[0]  # [-1] for best quality
 
     # Download
-    ys.download(oupath)
+    ys.download(outpath)
 
     # Convert mp4 to mp3
     default_filename = ys.default_filename
@@ -52,15 +52,15 @@ def ytdownload(link, oupath='out'):
             'ffmpeg',
             '-y',
             '-i',
-            os.path.join(oupath, default_filename),
-            os.path.join(oupath, new_filename),
+            os.path.join(outpath, default_filename),
+            os.path.join(outpath, new_filename),
         ],
         # Get no output
         stdout=subprocess.DEVNULL,
         stderr=subprocess.STDOUT,
     )
     # Delete mp4
-    subprocess.run(['rm', os.path.join(oupath, default_filename)])
+    subprocess.run(['rm', os.path.join(outpath, default_filename)])
 
 
 if __name__ == '__main__':
