@@ -9,6 +9,7 @@ help:
 	@echo "Run 'make' to create the venv"
 	@echo "Run 'make reqs' after sourcing the venv to install modules using requirements.txt"
 	@echo "Run 'make install' to be able to run YTD from anywhere"
+	@echo "Run 'make uninstall' to uninstall YTD"
 
 software:
 	@# Install pip, venv and ffmpeg
