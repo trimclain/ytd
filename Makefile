@@ -40,4 +40,22 @@ uninstall:
 	@if [[ -f ~/.local/bin/ytd ]]; then echo "Uninstalling YDT from .local/bin..." &&\
 		rm -f ~/.local/bin/ytd && echo "YDT was successfully uninstalled"; fi
 
-.PHONY: all help software reqs install uninstall
+#################################### Run Tests ####################################################
+container: ## Build a docker container for testing
+	@if ! command -v docker > /dev/null; then echo "Docker not found, install it first"; \
+		elif [[ $$(docker images | grep ytdtest) ]]; then \
+		echo 'Container "ytdtest" already exists'; else echo 'Building the "ytdtest" container' \
+		&& docker build -t ytdtest . && echo "Built successfully"; fi
+
+delcontainer:
+	@if [[ $$(docker images | grep ytdtest) ]]; then echo 'Deleting "ytdtest" container' && \
+		docker image rm ytdtest:latest -f; \
+		else echo 'Container "ytdtest" not found. Build it with \`make container\`.'; fi
+
+rebuild: delcontainer container ## Rebuild existing docker container
+
+test: ## Run the ytdtest container
+	@if [[ $$(docker images | grep ytdtest) ]]; then docker run -it ytdtest; \
+		else echo 'Container "ytdtest" not found. Build it with \`make container\`.'; fi
+
+.PHONY: all help software reqs install uninstall container delcontainer rebuild test
