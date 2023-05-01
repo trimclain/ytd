@@ -24,7 +24,7 @@ software:
 reqs:
 	@# Install required modules
 	@echo "Installing requirements..."
-	@pip install -r requirements.txt
+	@python3 -m pip install git+https://github.com/felipeucelli/pytube@fix-client
 	@echo "Done"
 
 install: software reqs
