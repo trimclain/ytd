@@ -16,4 +16,5 @@ Installation works on Debian-based systems and was tested on Ubuntu 22.04.
 
 ## Note
 The library `pytube`, which `ytd` is based on, breaks very often. I try to install the fixed version as soon as I find one.<br>
-Latest Update: 2023-05-01
+**Current State**: good<br>
+**Updated on**: 2023-05-31
