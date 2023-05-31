@@ -1,5 +1,7 @@
-# Output folder with the music
+# Output folders with the music
 out
+output
+songs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
