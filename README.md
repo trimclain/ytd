@@ -1,8 +1,12 @@
 # YTD
 YTD is a CLI YouTube downloader written in Python
 
-## How to install
+## Requirements
+- python3
+- pip
+- ffmpeg
 
+## How to install
 Installation works on Debian-based systems and was tested on Ubuntu 22.04.
 
 - (Recommended) To install YTD for current user, make sure `~/.local/bin/` is in `PATH` and then run `make install`.
@@ -15,6 +19,6 @@ Installation works on Debian-based systems and was tested on Ubuntu 22.04.
     4. `./ytd.py`
 
 ## Note
-The library `pytube`, which `ytd` is based on, breaks very often. I try to install the fixed version as soon as I find one.<br>
+The library `pytube`, which `ytd` is based on, breaks from time to time. I try to install the fixed version as soon as I find one.<br>
 **Current State**: good<br>
-**Updated on**: 2023-05-31
+**Updated on**: 2024-05-13
