@@ -1,17 +1,28 @@
+.ONESHELL:
 SHELL := /bin/bash
 
-all: software
+OS := $(shell awk -F= '$$1=="ID" { print $$2 ;}' /etc/os-release)
+
+all:
+	@if [[ $(OS) != "ubuntu"  ]]; then \
+		echo "Ubuntu is the only supported distro. Please refer to manual installation." && exit 0; fi
+
+	@make software
 	@# Create venv
 	@if [[ ! -d "venv" ]]; then echo "Creating venv..." && python3 -m venv venv && echo "Done";\
 		else echo "venv already exists"; fi
 
 help:
+	@echo "Supported Distros: Ubuntu"
 	@echo "Run 'make' to create the venv"
 	@echo "Run 'make reqs' after sourcing the venv to install modules using requirements.txt"
 	@echo "Run 'make install' install YTD"
 	@echo "Run 'make uninstall' to uninstall YTD"
 
 software:
+	@if [[ $(OS) == "ubuntu"  ]]; then \
+		echo "Ubuntu is the only supported distro. Please refer to manual installation." && exit 0; fi
+
 	@# Install pip, venv and ffmpeg
 	@if [[ ! -f /usr/bin/pip3 ]]; then echo "Installing python3-pip..." && sudo apt install python3-pip -y;\
 		else echo "pip3 is already installed"; fi
@@ -22,12 +33,20 @@ software:
 		else echo "ffmpeg is already installed"; fi
 
 reqs:
+	@if [[ $(OS) != "ubuntu"  ]]; then \
+		echo "Ubuntu is the only supported distro. Please refer to manual installation." && exit 0; fi
+
 	@# Install required modules
 	@echo "Installing requirements..."
-	@python3 -m pip install git+https://github.com/felipeucelli/pytube@fix-client
+	@python3 -m pip install git+https://github.com/pytube/pytube
 	@echo "Done"
 
-install: software reqs
+install:
+	@if [[ $(OS) != "ubuntu"  ]]; then \
+		echo "Ubuntu is the only supported distro. Please refer to manual installation." && exit 0; fi
+
+	@make software
+	@make reqs
 	@echo "Creating an executable in .local/bin..."
 	@# Make sure ~/.local/bin exists
 	@mkdir -p ~/.local/bin
