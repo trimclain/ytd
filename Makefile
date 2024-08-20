@@ -38,7 +38,7 @@ reqs:
 
 	@# Install required modules
 	@echo "Installing requirements..."
-	@python3 -m pip install git+https://github.com/pytube/pytube
+	@python3 -m pip install yt-dlp
 	@echo "Done"
 
 install:

@@ -1,30 +1,33 @@
 #!/usr/bin/env python3
 
-import sys
+# Author: trimclain
+# Requiriments: yt-dlp, ffmpeg
+
 import os
-import subprocess
-from pytube import YouTube
+import sys
+
+import yt_dlp
 
 
-def ytdownload_direct():
-    """ytdownload as a script from user input"""
+def yt_download_direct():
+    """yt_download_audio as a script from user input"""
 
     # Get the video from the Link
     if len(sys.argv) == 1:
-        link = input('Enter the Link: ')
+        url = input("Enter the URL: ")
     else:
-        link = sys.argv[1]
+        url = sys.argv[1]
 
-    ytdownload(link, outpath="songs", verbose=True)
+    yt_download_audio(url, download_path="songs", verbose=True)
 
 
-def ytdownload(link, outpath='out', verbose=False):
+def yt_download_audio(url, download_path="out", verbose=False):
     """
     Download a video from YouTube as mp3
 
     Args:
-        link: a string with a link to a YouTube video
-        oupath: optional, a string with destinatio folder, defaults to 'out'
+        url: a string with a link to a YouTube video
+        download_path: optional, a string with destinatio folder, defaults to 'out'
 
     Returns:
         None
@@ -32,50 +35,55 @@ def ytdownload(link, outpath='out', verbose=False):
     Raises:
         None
     """
-    if verbose:
-        print(f'Visiting {link}...')
 
-    # Create an object
-    yt = YouTube(link)
+    # Docs: https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#embedding-examples
+    ydl_opts = {
+        # opts: "worstaudio", "bestaudio[abr<=128]/worstaudio[abr>=64]", "bestaudio"
+        "format": "bestaudio/best",
+        "postprocessors": [{  # Post-process the download
+            "key": "FFmpegExtractAudio",  # Extract the audio using ffmpeg
+            "preferredcodec": "mp3",  # Convert to mp3
+            "preferredquality": "192",  # Quality of the mp3 (192 kbps here)
+        }],
+        "outtmpl": os.path.join(download_path, "%(title)s.%(ext)s"),
+        "logger": MyLogger(),
+    }
 
-    # Get the right stream
-    ys = yt.streams.filter(only_audio=True)[0]  # [-1] for best quality
-    default_filename = ys.default_filename
-    title = yt.title
+    if not os.path.isdir(download_path):
+        if verbose:
+            print(f"Creating the folder {download_path}...")
+        os.mkdir(download_path)
 
-    # Download
-    if verbose:
-        print(f'Downloading "{title}" as mp4... ', end='')
-    ys.download(outpath)
-    if verbose:
-        print('Done')
-
-    # Convert mp4 to mp3
-    new_filename = title + '.mp3'
-    if verbose:
-        print(f'Converting "{title}" to mp3... ', end='')
-    subprocess.run(
-        [
-            'ffmpeg',
-            '-y',
-            '-i',
-            os.path.join(outpath, default_filename),
-            os.path.join(outpath, new_filename),
-        ],
-        # Get no output
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.STDOUT,
-    )
-    if verbose:
-        print('Done')
-
-    # Delete mp4
-    if verbose:
-        print(f'Deleting "{title}.mp4"... ' )
-    subprocess.run(['rm', os.path.join(outpath, default_filename)])
-    if verbose:
-        print(f'Success! The file "{title}.mp3" can be found in the "{outpath}" folder.')
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info_dict = ydl.extract_info(url, download=False)
+        video_title = info_dict.get("title", None)
+        if verbose:
+            print(f"Downloading '{video_title}.mp3' to the directory '{
+                  download_path}'...", end=" ", flush="True")
+        # I know this is slower but whatever it's pretty
+        ydl.download([url])
+        if verbose:
+            print("Done")
 
 
-if __name__ == '__main__':
-    ytdownload_direct()
+class MyLogger:
+    def debug(self, msg):
+        # For compatibility with youtube-dl, both debug and info are passed into debug
+        # You can distinguish them by the prefix "[debug] "
+        if msg.startswith("[debug] "):
+            pass
+        else:
+            self.info(msg)
+
+    def info(self, msg):
+        pass
+
+    def warning(self, msg):
+        pass
+
+    def error(self, msg):
+        print(msg)
+
+
+if __name__ == "__main__":
+    yt_download_direct()
