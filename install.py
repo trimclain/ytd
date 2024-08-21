@@ -4,10 +4,9 @@
 
 
 import os
-import sys
 import subprocess
+import sys
 from pathlib import Path
-
 
 SCRIPT_PATH = os.path.join(Path.home(), '.local/bin/ytd')
 YTD_PATH = sys.path[0]
