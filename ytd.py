@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 # Author: trimclain
-# Requiriments: yt-dlp, ffmpeg
+# License: MIT
+#
+# Requirements: yt-dlp, ffmpeg
 
 import os
 import sys
