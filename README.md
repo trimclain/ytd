@@ -8,13 +8,24 @@ YTD is a CLI YouTube downloader written in Python
 - yt-dlp
 
 ## How to install
-Installation works on Debian-based systems and was tested on Ubuntu 22.04.
+Installation works on (not ancient) Arch- and Debian-based systems.
 
-- (Recommended) To install YTD for current user, make sure `~/.local/bin/` is in `PATH` and then run `make install`.
-  Now you can run `ytd` from anywhere.
+- *(Recommended)* To install YTD for current user 
+  - make sure `~/.local/bin/` is in `PATH` 
+  - run `make install`.
+  - run `ytd --help` to see how to use
 
-- To install the venv, the requirements and run YTD from this folder:
-    1. `make`
-    2. `source venv/bin/activate`
-    3. `make reqs`
-    4. `./ytd.py`
+- For development install using venv run
+  1. `make`
+  2. `source .venv/bin/activate`
+  3. `make reqs`
+  4. `./ytd.py`
+
+- Manual Installation
+  - install [requirements](#requirements)
+  - put `ytd.py` in `PATH` (e.g. `cp ytd.py ~/.local/bin/ytd`)
+  - run `ytd --help` to see how to use
+
+## Usage
+- Run `ytd` and follow the prompts
+- Run `ytd <YouTube-URL>` to download the mp3 of the video. Replace `<YouTube-URL>` with the actual URL of the YouTube video you want to download.
