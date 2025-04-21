@@ -11,16 +11,21 @@ import sys
 import yt_dlp
 
 
-def yt_download_direct():
-    """yt_download_audio as a script from user input"""
+def ytd():
+    """Run yt_download_audio with user input"""
 
-    # Get the video from the Link
     if len(sys.argv) == 1:
         url = input("Enter the URL: ")
     else:
         url = sys.argv[1]
 
-    yt_download_audio(url, download_path="songs", verbose=True)
+    running_from = sys.path[0]
+    if running_from == os.path.expanduser('~/.local/bin'):
+        download_path = os.path.expanduser("~/songs")
+    else:
+        download_path = os.path.abspath("./songs")
+
+    yt_download_audio(url, download_path=download_path, verbose=True)
 
 
 def yt_download_audio(url, download_path="out", verbose=False):
@@ -56,6 +61,10 @@ def yt_download_audio(url, download_path="out", verbose=False):
             print(f"Creating the folder {download_path}...")
         os.mkdir(download_path)
 
+    if "youtube.com" not in url and "youtu.be" not in url:
+        print("Not a valid YouTube URL. Aborting...")
+        return
+
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info_dict = ydl.extract_info(url, download=False)
         video_title = info_dict.get("title", None)
@@ -88,4 +97,4 @@ class MyLogger:
 
 
 if __name__ == "__main__":
-    yt_download_direct()
+    ytd()
